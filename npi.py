@@ -66,8 +66,9 @@ def main():
         helper()
     elif sys.argv[1] == "-e" and len(sys.argv) == 3:
         ascii_value = letterToAscii(sys.argv[2])
-        tweet_text = f"Encoded message: {ascii_value}"
-        tweet(api, tweet_text)
+        command_line =  commandAppender(ascii_value)
+        print(f"Encoded message: {command_line}")
+        # tweet(api, command_line)
     elif sys.argv[1] == "-d" and len(sys.argv) == 3:
         print(asciiToLetter(sys.argv[2]))
     else:
