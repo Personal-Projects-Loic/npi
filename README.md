@@ -45,3 +45,6 @@ Supposons que vous ayez le texte **"Hello"** :
 4. Ajout du prefix et du suffix
     - prefix = "echo '[q]sa[ln0=aln256%Pln256/snlbx]sb"
     - suffix = "snlbxq'|dc"
+
+5. Resultat : 
+    - echo '[q]sa[ln0=aln256%Pln256/snlbx]sb478560413000snlbxq'|dc
