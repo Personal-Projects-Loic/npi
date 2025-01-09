@@ -3,11 +3,15 @@ import sys
 import os
 from dotenv import load_dotenv
 import tweepy
+from pprint import pprint
+
+
+load_dotenv()
 
 oauth_consumer_key = os.getenv("API_KEY")
 oauth_consumer_secret = os.getenv("API_KEY_SECRET")
-access_token = os.getenv("ACCESS_TOKEN")
-access_token_secret = os.getenv("ACCESS_TOKEN_SECRET")
+access = os.getenv("ACCESS_TOKEN")
+access_secret = os.getenv("ACCESS_TOKEN_SECRET")
 bearer = os.getenv("BEARER")
 
 def helper():
@@ -43,15 +47,19 @@ def twitterOAuthV2() -> tweepy.Client:
         bearer_token=bearer,
         consumer_key=oauth_consumer_key,
         consumer_secret=oauth_consumer_secret,
-        access_token=access_token,
-        access_token_secret=access_token_secret,
+        access_token=access,
+        access_token_secret=access_secret,
     )
+
+    print(access, access_secret)
+    
+    pprint(vars(client))
     return client
 
 def twitterOAuthV1() -> tweepy.API:
     auth = tweepy.OAuth1UserHandler(
         oauth_consumer_key, oauth_consumer_secret,
-        access_token, access_token_secret
+        access, access_secret
     )
     api = tweepy.API(auth)
 
@@ -69,9 +77,7 @@ def tweet(client, tweet_text):
     except tweepy.TweepyException as e:
         print(f"Erreur lors de l'envoi du tweet: {e}")
 
-def main():
-    load_dotenv()
-
+def main():    
     if len(sys.argv) < 2 or sys.argv[1] == "-h":
         helper()
     elif sys.argv[1] == "-e" and len(sys.argv) == 3:
