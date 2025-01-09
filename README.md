@@ -10,7 +10,8 @@ Cloner le repo
 git clone "repo URL"
 ```
 
-Définir les clés API Twitter dans un fichier .env (qui contient API_KEY, API_KEY_SECRET, ACCESS_TOKEN, et ACCESS_TOKEN_SECRET).
+Définir les clés API Twitter dans un fichier .env (qui contient API_KEY, API_KEY_SECRET, ACCESS_TOKEN, et ACCESS_TOKEN_SECRET, BEARER_TOKEN).
+Ne pas oublier d'activer READ/WRITE dans le dashboard de X Developer
 
 Pour executer : 
 
