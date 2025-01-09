@@ -4,6 +4,12 @@ import os
 from dotenv import load_dotenv
 import tweepy
 
+oauth_consumer_key = os.getenv("API_KEY")
+oauth_consumer_secret = os.getenv("API_KEY_SECRET")
+access_token = os.getenv("ACCESS_TOKEN")
+access_token_secret = os.getenv("ACCESS_TOKEN_SECRET")
+bearer_token = os.getenv("BEARER")
+
 def helper():
     print("Usage :")
     print("\t./npi.py -e \"sentence to encode\"")
@@ -30,15 +36,18 @@ def commandAppender(ascii):
     prefix = "echo '[q]sa[ln0=aln256%Pln256/snlbx]sb"
     suffix = "snlbxq'|dc"
     res = prefix + str(ascii) + suffix
-
     return res
 
-def twitterOAuth():
-    oauth_consumer_key = os.getenv("API_KEY")
-    oauth_consumer_secret = os.getenv("API_KEY_SECRET")
-    access_token = os.getenv("ACCESS_TOKEN")
-    access_token_secret = os.getenv("ACCESS_TOKEN_SECRET")
+def twitterOAuthV2() -> tweepy.Client:
+    client = tweepy.Client(
+        consumer_key=oauth_consumer_key,
+        consumer_secret=oauth_consumer_secret,
+        access_token=access_token,
+        access_token_secret=access_token_secret,
+    )
+    return client
 
+def twitterOAuthV1() -> tweepy.API:
     auth = tweepy.OAuthHandler(oauth_consumer_key, oauth_consumer_secret)
     auth.set_access_token(access_token, access_token_secret)
     api = tweepy.API(auth)
@@ -51,24 +60,29 @@ def twitterOAuth():
         print(f"Error during authentication: {e}")
         sys.exit(1)
 
-def tweet(api, tweet_text):
+def tweet(client, tweet_text):
     if len(tweet_text) > 280:
         print("Error: Tweet text exceeds 280 characters.")
         return
-    api.update_status(tweet_text)
-
+    
+    try:
+        response = client.create_tweet(text=tweet_text)
+        print(f"Tweet publié avec succès ! ID du tweet: {response.data['id']}")
+    except tweepy.TweepyException as e:
+        print(f"Erreur lors de l'envoi du tweet: {e}")
 
 def main():
     load_dotenv()
 
-    api = twitterOAuth()
     if len(sys.argv) < 2 or sys.argv[1] == "-h":
         helper()
     elif sys.argv[1] == "-e" and len(sys.argv) == 3:
         ascii_value = letterToAscii(sys.argv[2])
-        command_line =  commandAppender(ascii_value)
+        command_line = commandAppender(ascii_value)
         print(f"Encoded message: {command_line}")
-        # tweet(api, command_line)
+        
+        client = twitterOAuthV2()
+        tweet(client, command_line)
     elif sys.argv[1] == "-d" and len(sys.argv) == 3:
         print(asciiToLetter(sys.argv[2]))
     else:
