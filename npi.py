@@ -8,7 +8,7 @@ oauth_consumer_key = os.getenv("API_KEY")
 oauth_consumer_secret = os.getenv("API_KEY_SECRET")
 access_token = os.getenv("ACCESS_TOKEN")
 access_token_secret = os.getenv("ACCESS_TOKEN_SECRET")
-bearer_token = os.getenv("BEARER")
+bearer = os.getenv("BEARER")
 
 def helper():
     print("Usage :")
@@ -40,6 +40,7 @@ def commandAppender(ascii):
 
 def twitterOAuthV2() -> tweepy.Client:
     client = tweepy.Client(
+        bearer_token=bearer,
         consumer_key=oauth_consumer_key,
         consumer_secret=oauth_consumer_secret,
         access_token=access_token,
@@ -48,17 +49,11 @@ def twitterOAuthV2() -> tweepy.Client:
     return client
 
 def twitterOAuthV1() -> tweepy.API:
-    auth = tweepy.OAuthHandler(oauth_consumer_key, oauth_consumer_secret)
-    auth.set_access_token(access_token, access_token_secret)
+    auth = tweepy.OAuth1UserHandler(
+        oauth_consumer_key, oauth_consumer_secret,
+        access_token, access_token_secret
+    )
     api = tweepy.API(auth)
-    
-    try:
-        api.verify_credentials()
-        print("Authentication OK")
-        return api
-    except tweepy.TweepyException as e:
-        print(f"Error during authentication: {e}")
-        sys.exit(1)
 
 def tweet(client, tweet_text):
     if len(tweet_text) > 280:
@@ -67,7 +62,10 @@ def tweet(client, tweet_text):
     
     try:
         response = client.create_tweet(text=tweet_text)
-        print(f"Tweet publié avec succès ! ID du tweet: {response.data['id']}")
+        if response.data:
+            print(f"Tweet publié avec succès ! ID du tweet: {response.data['id']}")
+        else:
+            print("Erreur lors de l'envoi du tweet : pas de données dans la réponse.")
     except tweepy.TweepyException as e:
         print(f"Erreur lors de l'envoi du tweet: {e}")
 
