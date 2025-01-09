@@ -50,10 +50,6 @@ def twitterOAuthV2() -> tweepy.Client:
         access_token=access,
         access_token_secret=access_secret,
     )
-
-    print(access, access_secret)
-    
-    pprint(vars(client))
     return client
 
 def twitterOAuthV1() -> tweepy.API:
@@ -66,6 +62,11 @@ def twitterOAuthV1() -> tweepy.API:
 def tweet(client, tweet_text):
     if len(tweet_text) > 280:
         print("Error: Tweet text exceeds 280 characters.")
+        return
+    
+    confirmation = input(f"Do you really want to tweet this? (y/n): ")
+    if confirmation.lower() != 'y':
+        print("Tweet not sent.")
         return
     
     try:
@@ -81,6 +82,7 @@ def main():
     if len(sys.argv) < 2 or sys.argv[1] == "-h":
         helper()
     elif sys.argv[1] == "-e" and len(sys.argv) == 3:
+        
         ascii_value = letterToAscii(sys.argv[2])
         command_line = commandAppender(ascii_value)
         print(f"Encoded message: {command_line}")
