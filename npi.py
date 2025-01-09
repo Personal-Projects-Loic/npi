@@ -5,7 +5,6 @@ from dotenv import load_dotenv
 import tweepy
 from pprint import pprint
 
-
 load_dotenv()
 
 oauth_consumer_key = os.getenv("API_KEY")
@@ -58,6 +57,7 @@ def twitterOAuthV1() -> tweepy.API:
         access, access_secret
     )
     api = tweepy.API(auth)
+    return api
 
 def tweet(client, tweet_text):
     if len(tweet_text) > 280:
@@ -82,7 +82,6 @@ def main():
     if len(sys.argv) < 2 or sys.argv[1] == "-h":
         helper()
     elif sys.argv[1] == "-e" and len(sys.argv) == 3:
-        
         ascii_value = letterToAscii(sys.argv[2])
         command_line = commandAppender(ascii_value)
         print(f"Encoded message: {command_line}")
