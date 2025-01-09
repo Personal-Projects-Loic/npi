@@ -19,7 +19,7 @@ chmod +x npi.py
 ./npi.py -e "Phrase qui sera encodée puis tweetée"
 ```
 
-**Do not forget to create an X Developer account to get your credentials**
+**Do not forget to create an X Developer account to get your credentials and you need API V2**
 
 ## Encoder avec la commande "dc"
 
