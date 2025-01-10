@@ -3,7 +3,6 @@ import sys
 import os
 from dotenv import load_dotenv
 import tweepy
-from pprint import pprint
 
 load_dotenv()
 
@@ -87,7 +86,7 @@ def main():
         print(f"Encoded message: {command_line}")
         
         client = twitterOAuthV2()
-        tweet(client, command_line)
+        tweet(client, command_line + " 🤖")
     elif sys.argv[1] == "-d" and len(sys.argv) == 3:
         print(asciiToLetter(sys.argv[2]))
     else:
